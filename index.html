@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Web Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .interactive-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .interactive-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .slideshow {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .slideshow img {
+            max-width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            transition: opacity 0.5s;
+        }
+        .tabs {
+            margin: 20px 0;
+        }
+        .tab-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .tab-links button {
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #ddd;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab-links button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 5px 5px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+        .success {
+            color: green;
+            font-size: 12px;
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Web Page</h1>
+
+    <!-- Interactive Button -->
+    <button class="interactive-button" id="actionButton">Click Me!</button>
+
+    <!-- Slideshow -->
+    <div class="slideshow">
+        <img id="slideImage" src="https://via.placeholder.com/600x200?text=Image+1" alt="Slide">
+        <div>
+            <button onclick="prevSlide()">Previous</button>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab-links">
+            <button class="active" onclick="openTab('tab1')">Tab 1</button>
+            <button onclick="openTab('tab2')">Tab 2</button>
+            <button onclick="openTab('tab3')">Tab 3</button>
+        </div>
+        <div id="tab1" class="tab-content fade-in">
+            <h2>Tab 1</h2>
+            <p>This is the content of Tab 1.</p>
+        </div>
+        <div id="tab2" class="tab-content" style="display: none;">
+            <h2>Tab 2</h2>
+            <p>This is the content of Tab 2.</p>
+        </div>
+        <div id="tab3" class="tab-content" style="display: none;">
+            <h2>Tab 3</h2>
+            <p>This is the content of Tab 3.</p>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-container">
+        <form id="userForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" required>
+                <span class="error" id="nameError">Name is required</span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" required>
+                <span class="error" id="emailError">Please enter a valid email</span>
+                <span class="success" id="emailSuccess">Looks good!</span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" required>
+                <span class="error" id="passwordError">Password must be at least 8 characters</span>
+                <span class="success" id="passwordSuccess">Looks good!</span>
+            </div>
+            <button type="submit" class="interactive-button">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Event Handling
+        const actionButton = document.getElementById('actionButton');
+        let clickCount = 0;
+
+        actionButton.addEventListener('click', () => {
+            clickCount++;
+            actionButton.style.backgroundColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+            actionButton.textContent = `Clicked ${clickCount} times!`;
+        });
+
+        actionButton.addEventListener('dblclick', () => {
+            // Secret double-click action
+            actionButton.textContent = 'Secret Unlocked! 🎉';
+            actionButton.style.backgroundColor = '#ff0';
+            setTimeout(() => {
+                actionButton.textContent = `Clicked ${clickCount} times!`;
+                actionButton.style.backgroundColor = '#4CAF50';
+            }, 2000);
+        });
+
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                actionButton.click();
+            }
+        });
+
+        // Slideshow
+        const slides = [
+            'https://via.placeholder.com/600x200?text=Image+1',
+            'https://via.placeholder.com/600x200?text=Image+2',
+            'https://via.placeholder.com/600x200?text=Image+3'
+        ];
+        let currentSlide = 0;
+        const slideImage = document.getElementById('slideImage');
+
+        function showSlide(index) {
+            slideImage.style.opacity = 0;
+            setTimeout(() => {
+                slideImage.src = slides[index];
+                slideImage.style.opacity = 1;
+            }, 500);
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Tabs
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+                tab.classList.remove('fade-in');
+            });
+            document.querySelectorAll('.tab-links button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const tab = document.getElementById(tabId);
+            tab.style.display = 'block';
+            tab.classList.add('fade-in');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Form Validation
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        emailInput.addEventListener('input', () => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailError = document.getElementById('emailError');
+            const emailSuccess = document.getElementById('emailSuccess');
+            if (emailRegex.test(emailInput.value)) {
+                emailError.style.display = 'none';
+                emailSuccess.style.display = 'block';
+            } else {
+                emailError.style.display = 'block';
+                emailSuccess.style.display = 'none';
+            }
+        });
+
+        passwordInput.addEventListener('input', () => {
+            const passwordError = document.getElementById('passwordError');
+            const passwordSuccess = document.getElementById('passwordSuccess');
+            if (passwordInput.value.length >= 8) {
+                passwordError.style.display = 'none';
+                passwordSuccess.style.display = 'block';
+            } else {
+                passwordError.style.display = 'block';
+                passwordSuccess.style.display = 'none';
+            }
+        });
+
+        function validateForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!name) {
+                document.getElementById('nameError').style.display = 'block';
+                return false;
+            }
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                return false;
+            }
+            if (password.length < 8) {
+                document.getElementById('passwordError').style.display = 'block';
+                return false;
+            }
+
+            alert('Form submitted successfully!');
+            document.getElementById('userForm').reset();
+            document.querySelectorAll('.error').forEach(err => err.style.display = 'none');
+            document.querySelectorAll('.success').forEach(suc => suc.style.display = 'none');
+            return false;
+        }
+    </script>
+</body>
+</html>
